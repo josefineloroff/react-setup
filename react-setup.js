@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const prompt = require('prompt');
-const mustache = require('mustache');
+const handlebars = require('handlebars');
 const untildify = require('untildify');
 const projectFiles = require('./react-setup/files');
 
@@ -67,16 +67,13 @@ prompt.get(schema, (error, result) => {
 
                     fs.writeFileSync(
                         path.join(userDirectory, directory, file),
-                        mustache.render(
-                            content.toString('utf8'),
-                            {
-                                redux: result.redux === 'y',
-                                router: result.router === 'y',
-                                server: result.server === 'y',
-                                title: result.title,
-                                webpackPort: result.webpackPort,
-                            }
-                        )
+                        handlebars.compile(content.toString('utf8'))({
+                            redux: result.redux === 'y',
+                            router: result.router === 'y',
+                            server: result.server === 'y',
+                            title: result.title,
+                            webpackPort: result.webpackPort,
+                        })
                     );
                 }
             }

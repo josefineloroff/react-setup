@@ -1,25 +1,39 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-{{#redux}}
+{{#if redux}}
 import { Provider } from 'react-redux';
-{{/redux}}
+{{/if}}
+{{#if router}}
+import { Router } from 'react-router-dom';
+{{/if}}
 import 'polyfills';
-{{#redux}}
+{{#if redux}}
+{{#if router}}
 import store, { browserHistory } from './store';
-{{/redux}}
+{{else}}
+import store from './store';
+{{/if}}
+{{/if}}
 import App from './components/App';
 import '../style/app.sass';
 
 const render = (AppComponent) => {
     ReactDOM.render(
-        {{#redux}}
+        {{#if redux}}
+        {{#if router}}
+        <Router history={browserHistory}>
+            <Provider store={store}>
+                <AppComponent />
+            </Provider>
+        </Router>,
+        {{else}}
         <Provider store={store}>
             <AppComponent />
         </Provider>,
-        {{/redux}}
-        {{^redux}}
+        {{/if}}
+        {{else}}
         <AppComponent />,
-        {{/redux}}
+        {{/if}}
         document.getElementById('app'),
     );
 };
